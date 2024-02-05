@@ -1,10 +1,10 @@
-from typing import Any
+from typing import Any, Optional
 import jwt
 from datetime import datetime, timedelta
 
 
 class JWTHandler:
-    def __init__(self, subject: str, expires_after: float, **kwargs) -> None:
+    def __init__(self, subject: Optional[str] = None, expires_after: float = 2400, **kwargs) -> None:
         current_time = datetime.utcnow()
         expiration_time = current_time + timedelta(hours=expires_after)
 

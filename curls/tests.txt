@@ -1,0 +1,38 @@
+curl localhost:5000/api/user \
+--include \
+--header "Content-Type: application/json" \
+--request "POST" \
+--data '{"email": "janedoe@example.com", "first_name": "Jane", "last_name": "Doe", "password": "password"}'
+
+curl localhost:5000/api/user \
+--include \
+--header "Content-Type: application/json" \
+--header "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTcwNzA2ODA2Mi4zNzEyNDMsImV4cCI6MTcxNTcwODA2Mi4zNzEyNDN9.HSVuGruCJqV6nlxTvZE3qNhZ0_6NeYiNeuThfApsLwY" \
+--request "GET"
+
+curl localhost:5000/api/user/1 \
+--include \
+--request "PUT" \
+--header "Content-Type: application/json" \
+--header "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTcwNzA2ODA2Mi4zNzEyNDMsImV4cCI6MTcxNTcwODA2Mi4zNzEyNDN9.HSVuGruCJqV6nlxTvZE3qNhZ0_6NeYiNeuThfApsLwY" \
+--data '{"email": "janedoe@example.com", "first_name": "Jane", "last_name": "Smith", "password": "password"}'
+
+curl localhost:5000/api/user/1 \
+--include \
+--request "DELETE" \
+--header "Content-Type: application/json" \
+--header "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTcwNzA2ODA2Mi4zNzEyNDMsImV4cCI6MTcxNTcwODA2Mi4zNzEyNDN9.HSVuGruCJqV6nlxTvZE3qNhZ0_6NeYiNeuThfApsLwY" \
+
+
+curl localhost:5000/api/login \
+--include \
+--header "Content-Type: application/json" \
+--request "POST" \
+--data '{"email": "janedoe@example.com", "password": "password"}'
+
+
+curl http://localhost:5000/api/inference \
+--request POST \
+--header "Content-Type: multipart/form-data" \
+--header "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTcwNzA2ODA2Mi4zNzEyNDMsImV4cCI6MTcxNTcwODA2Mi4zNzEyNDN9.HSVuGruCJqV6nlxTvZE3qNhZ0_6NeYiNeuThfApsLwY" \
+-F "picture=@/c/Users/biteater/Pictures/HomePage.PNG"

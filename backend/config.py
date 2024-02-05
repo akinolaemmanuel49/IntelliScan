@@ -19,6 +19,7 @@ class Config:
         "postgres", "postgresql", 1
     )
     ENCRYPTION_SCHEMES: list[str] = ["bcrypt"]
+    UPLOAD_FOLDER: str = os.environ.get('UPLOAD_FOLDER')
 
 
 class ProductionConfig(Config):
