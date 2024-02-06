@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Tuple
+
 from flask import current_app
 from flask_restful import Resource, reqparse
 

@@ -1,29 +1,9 @@
-from datetime import datetime
 import re
 
 from sqlalchemy.orm import validates
 
 from intelli_scan.database import db, pwd_context
-
-
-class BaseModel(db.Model):
-    __abstract__ = True
-
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow())
-    updated_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow())
-
-    def save_to_db(self):
-        """Writes data to the database"""
-        db.session.add(self)
-        db.session.commit()
-
-    def delete_from_db(self):
-        """Deletes data from the database"""
-        db.session.delete(self)
-        db.session.commit()
+from intelli_scan.database.models import BaseModel
 
 
 class UserModel(BaseModel):
@@ -32,7 +12,7 @@ class UserModel(BaseModel):
 
     first_name = db.Column(db.String(128), nullable=False)
     last_name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     image = db.Column(db.String(255), nullable=True)
 
