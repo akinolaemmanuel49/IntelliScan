@@ -22,6 +22,12 @@ Possibly implement a table to blacklist tokens when logout endpoint is called.
     ```
     cd backend
 
+    flask db init
+
+    flask db migrate
+
+    flask db upgrade
+
     flask run
     ```
 - Use the curls in the curls folder to test, copy a curl paste in your terminal run. (Only works on Unix type operating systems, if you are running windows you can run it from git bash if you have it installed or you could use postman like a regular person)
