@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Tuple
 from flask import current_app
 from flask_restful import Resource, reqparse
 
@@ -59,6 +60,19 @@ class User(Resource):
         return UserModel.query.filter_by(email=email_address).first()
 
     def get(self):
+        """Returns user details and HTTP status as HTTP response based on HTTP request
+
+        Returns:
+            JSON object: A 200 HTTP status and response with details of a user
+
+            JSON object: A 403 HTTP status and response for an unauthenticated or unauthorized user
+
+            JSON object: A 404 HTTP status and response for a non-existing user
+
+        Raises:
+            Exception: General exceptions aligned to SQLAlchemy in the form of a 500 HTTP status 
+            and JSON content-type response
+        """
         data_token = get_auth_token()
         jwt_handler = JWTHandler()
 
@@ -87,6 +101,17 @@ class User(Resource):
             return {"message": str(e)}, 500
 
     def post(self):
+        """Registers a new user via HTTP POST request
+
+        Returns:
+            JSON object: A 201 HTTP status and response with name of the user that was created
+
+            JSON object: A 400 HTTP status and response for an existing user
+
+        Raises:
+            Exception: General exceptions aligned to SQLAlchemy in the form of a 500 HTTP status 
+            and JSON content-type response
+        """
         data_user_details = self.get_user_details_parsed_args()
         data_password = self.get_user_password_parsed_args()
 
@@ -108,6 +133,19 @@ class User(Resource):
             return {"message": str(e)}, 500
 
     def put(self, user_id):
+        """Updates a user via HTTP PUT request
+
+        Returns:
+            JSON object: A 200 HTTP status and response with the of the user that was updated
+
+            JSON object: A 403 HTTP status and response for an unauthenticated or unauthorized user
+
+            JSON object: A 404 HTTP status and response for a non-existing user
+
+        Raises:
+            Exception: General exceptions aligned to SQLAlchemy in the form of a 500 HTTP status 
+            and JSON content-type response
+        """
         data_token = get_auth_token()
         jwt_handler = JWTHandler()
         data_user_id = user_id
@@ -144,6 +182,19 @@ class User(Resource):
             return {"message": str(e)}, 500
 
     def delete(self, user_id: int):
+        """Deletes a user via HTTP DELETE request
+
+        Returns:
+            JSON object: A 200 HTTP status and response with confirmation message of the deletion
+
+            JSON object: A 403 HTTP status and response for an unauthenticated or unauthorized user
+
+            JSON object: A 404 HTTP status and response for a non-existing user
+
+        Raises:
+            Exception: General exceptions aligned to SQLAlchemy in the form of a 500 HTTP status 
+            and JSON content-type response
+        """
         data_token = get_auth_token()
         jwt_handler = JWTHandler()
         data_user_id = user_id
