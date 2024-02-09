@@ -19,6 +19,9 @@ class Config:
         "postgres", "postgresql", 1
     )
     ENCRYPTION_SCHEMES: list[str] = ["bcrypt"]
+    GOOGLE_OAUTH2_CONF_URL: str = os.environ.get('GOOGLE_OAUTH2_CONF_URL')
+    GOOGLE_CLIENT_ID: str = os.environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SECRET: str = os.environ.get('GOOGLE_CLIENT_SECRET')
     UPLOAD_FOLDER: str = os.environ.get('UPLOAD_FOLDER')
 
 

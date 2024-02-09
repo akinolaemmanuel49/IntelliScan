@@ -13,8 +13,9 @@ class UserModel(BaseModel):
     first_name = db.Column(db.String(128), nullable=False)
     last_name = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
-    password_hash = db.Column(db.String(255), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=True)
     image = db.Column(db.String(255), nullable=True)
+    google_id = db.Column(db.String(255), nullable=True, unique=True)
 
     @validates("email")
     def validate_email(self, key, email):
