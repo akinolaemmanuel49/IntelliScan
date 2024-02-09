@@ -9,6 +9,7 @@ INTELLISCAN is an AI-driven medical imaging solution to accurately diagnose and 
 - [x] User Update
 - [x] User Delete
 - [x] Inference Upload ?!
+- [x] Google Oauth2 login
 
 #### ?! Logout
 Possibly implement a table to blacklist tokens when logout endpoint is called.
@@ -33,3 +34,5 @@ Possibly implement a table to blacklist tokens when logout endpoint is called.
 - Use the curls in the curls folder to test, copy a curl paste in your terminal run. (Only works on Unix type operating systems, if you are running windows you can run it from git bash if you have it installed or you could use postman like a regular person)
 
 Don`t forget to set environment variables or use the .env since Python DotEnv is a dependency
+
+- Get CLIENT_ID and CLIENT_SECRET from google cloud console [VIST HERE!!!](https://console.cloud.google.com/apis/credentials)
