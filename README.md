@@ -36,3 +36,10 @@ Possibly implement a table to blacklist tokens when logout endpoint is called.
 Don`t forget to set environment variables or use the .env since Python DotEnv is a dependency
 
 - Get CLIENT_ID and CLIENT_SECRET from google cloud console [VIST HERE!!!](https://console.cloud.google.com/apis/credentials)
+
+
+#### Tasks
+- [ ] Document API endpoints.
+
+#### Notes
+Place notes here.
