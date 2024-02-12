@@ -128,7 +128,7 @@ class User(Resource):
         except Exception as e:
             return {"message": str(e)}, 500
 
-    def put(self, user_id):
+    def put(self):
         """Updates a user via HTTP PUT request
 
         Returns:
@@ -144,20 +144,19 @@ class User(Resource):
         """
         data_token = get_auth_token()
         jwt_handler = JWTHandler()
-        data_user_id = user_id
 
         try:
             # check token validity
             decoded_token_user_id = jwt_handler.decode(
                 encoded_jwt=data_token, secret=get_secret_key(app=current_app))['sub']
 
-            if int(decoded_token_user_id) == data_user_id:
+            if isinstance(decoded_token_user_id, int):
                 data_user_details = self.get_user_details_parsed_args()
                 data_password = self.get_user_password_parsed_args()
 
                 try:
                     user = UserModel.query.filter_by(
-                        id=data_user_id).first()
+                        id=decoded_token_user_id).first()
 
                     if user:
                         user.email = data_user_details['email']
@@ -176,7 +175,7 @@ class User(Resource):
         except Exception as e:
             return {"message": str(e)}, 500
 
-    def delete(self, user_id: int):
+    def delete(self):
         """Deletes a user via HTTP DELETE request
 
         Returns:
@@ -192,22 +191,21 @@ class User(Resource):
         """
         data_token = get_auth_token()
         jwt_handler = JWTHandler()
-        data_user_id = user_id
 
         try:
             # check token validity
             decoded_token_user_id = jwt_handler.decode(
                 encoded_jwt=data_token, secret=get_secret_key(app=current_app))['sub']
 
-            if int(decoded_token_user_id) == data_user_id:
+            if isinstance(decoded_token_user_id, int):
 
                 try:
                     user = UserModel.query.filter_by(
-                        id=data_user_id).first()
+                        id=decoded_token_user_id).first()
 
                     if user:
                         user.delete_from_db()
-                        return {"message": "The user has been deleted successfully"}, 200
+                        return {"message": "The user has been deleted successfully"}, 204
                     else:
                         return {"message": "The user does not exist"}, 404
                 except Exception as e:
