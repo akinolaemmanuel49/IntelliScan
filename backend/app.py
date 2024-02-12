@@ -1,4 +1,4 @@
-from backend.intelli_scan import create_app
+from intelli_scan import create_app
 
 app = create_app()
 
