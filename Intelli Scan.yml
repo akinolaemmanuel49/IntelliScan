@@ -1,0 +1,105 @@
+openapi: '3.0.2'
+info:
+  title: Intelli Scan
+  version: '1.0'
+servers:
+  - url: http://127.0.0.1:5000/api
+paths:
+  /login:
+    post:
+      summary: Get Authentication token using Credential schema.
+      requestBody:
+        description: JSON containing credential details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credential'
+        
+      responses:
+        '200':
+          description: A JSON containing the user id, a message and the auth token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /user:
+    post:
+      summary: Create a new user using UserCreate schema.
+      requestBody:
+        description: JSON containing details to create a new user.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: JSON containing message confirming user creation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get user details using Authentication token.
+      responses:
+        '200':
+          description: A single user's details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    Credential:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    TokenResponse:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        message:
+          type: string
+        auth_token:
+          type: string
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+  
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    
+#/login email, password
+#/user email, name, password [UNPROTECTED] C || [PROTECTED] RUD
+#/inference image [PROTECTED]
