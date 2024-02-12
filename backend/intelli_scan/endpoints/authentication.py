@@ -59,7 +59,7 @@ class Login(Resource):
                 if UserModel.verify_hash(data['password'], user.password_hash):
                     response = {
                         'user_id': user.id,
-                        'message': f"Logged in as {user.first_name} {user.last_name}",
+                        'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
                     return response, 200
@@ -88,7 +88,7 @@ class GoogleOauthAuth(Resource):
                 secret=get_secret_key(app=current_app))
             response = {
                 'user_id': user.id,
-                'message': f"Logged in as {user.first_name} {user.last_name}",
+                'message': f"Logged in as {user.name}",
                 'auth_token': auth_token
             }
             return response
@@ -97,8 +97,7 @@ class GoogleOauthAuth(Resource):
         if not check:
             user = UserModel(
                 email=token['userinfo']['email'],
-                first_name=token['userinfo']['given_name'],
-                last_name=token['userinfo']['family_name'],
+                name=f"{token['userinfo']['given_name']} {token['userinfo']['family_name']}",
                 google_id=token['userinfo']['sub']
             )
             user.save_to_db()

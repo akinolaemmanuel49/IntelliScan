@@ -22,10 +22,8 @@ class User(Resource):
         parser.add_argument('email', type=str,
                             help='Email address used to login. This should be a string',
                             required=True)
-        parser.add_argument('first_name', type=str,
-                            help='The first name of the user', required=True)
-        parser.add_argument('last_name', type=str,
-                            help='The last name of the user', required=True)
+        parser.add_argument('name', type=str,
+                            help='The name of the user', required=True)
         return parser.parse_args()
 
     @staticmethod
@@ -88,8 +86,7 @@ class User(Resource):
                 if user:
                     response = {
                         "user_id": user.id,
-                        "first_name": user.first_name,
-                        "last_name": user.last_name,
+                        "name": user.name,
                         "email": user.email
                     }
                     return response, 200
@@ -120,13 +117,12 @@ class User(Resource):
             if not self.check_existing_user(data_user_details['email']):
                 user = UserModel(
                     email=data_user_details['email'],
-                    first_name=data_user_details['first_name'],
-                    last_name=data_user_details['last_name'],
+                    name=data_user_details['name'],
                     password_hash=UserModel.generate_hash(
                         data_password['password'])
                 )
                 user.save_to_db()
-                return {"message": f"User {data_user_details['first_name']} {data_user_details['last_name']} was created"}, 201
+                return {"message": f"User {data_user_details['name']}  was created"}, 201
             else:
                 return {"message": "That email address already exists"}, 400
         except Exception as e:
@@ -165,13 +161,12 @@ class User(Resource):
 
                     if user:
                         user.email = data_user_details['email']
-                        user.first_name = data_user_details['first_name']
-                        user.last_name = data_user_details['last_name']
+                        user.name = data_user_details['name']
                         user.password_hash = UserModel.generate_hash(
                             data_password['password'])
                         user.updated_at = datetime.utcnow()
                         user.save_to_db()
-                        return {"message": f"User {data_user_details['first_name']} {data_user_details['last_name']} was updated"}, 200
+                        return {"message": f"User {data_user_details['name']} was updated"}, 200
                     else:
                         return {"message": "This user does not exist"}, 404
                 except Exception as e:
@@ -212,9 +207,9 @@ class User(Resource):
 
                     if user:
                         user.delete_from_db()
-                        return {"message": "This user has been deleted successfully"}, 200
+                        return {"message": "The user has been deleted successfully"}, 200
                     else:
-                        return {"message": "This user does not exist"}, 404
+                        return {"message": "The user does not exist"}, 404
                 except Exception as e:
                     return {"message": str(e)}, 500
             else:
