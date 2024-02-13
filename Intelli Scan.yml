@@ -3,7 +3,7 @@ info:
   title: Intelli Scan
   version: '1.0'
 servers:
-  - url: http://127.0.0.1:5000/api
+  - url: https://intelli-scan-api.onrender.com/api
 paths:
   /login:
     post:
@@ -51,6 +51,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    put:
+      security:
+        - bearerAuth: []
+      summary: Update user details using Authentication token.
+      requestBody:
+        description: JSON containing details to update a user.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Confirmation of successful user detail update.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Delete a user using Authentication token.
+      responses:
+        '204':
+          description: Confirmation of successful user deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+      
 
 components:
   schemas:
@@ -79,6 +109,15 @@ components:
           type: string
         password:
           type: string
+    UserUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
     User:
       type: object
       properties:
@@ -99,6 +138,15 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    oauthGoogle:
+      type: oauth2
+      description: This API uses OAuth2.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+            
+            
     
 #/login email, password
 #/user email, name, password [UNPROTECTED] C || [PROTECTED] RUD

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 class Config:
     # load dot env file
-    env_path = Path(".") / ".env"
+    env_path = Path("..") / ".env"
     load_dotenv(dotenv_path=env_path)
 
     DEBUG: bool = False
