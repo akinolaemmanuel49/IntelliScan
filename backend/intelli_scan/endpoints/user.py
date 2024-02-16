@@ -89,11 +89,11 @@ class User(Resource):
                         "name": user.name,
                         "email": user.email
                     }
-                    return response, 200
+                    return response, 200, {"Access-Control-Allow-Origin": "*"}
                 else:
-                    return {"message": "This user does not exist"}, 404
+                    return {"message": "This user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
             else:
-                return {"message": decoded_token_response}, 403
+                return {"message": decoded_token_response}, 403, {"Access-Control-Allow-Origin": "*"}
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -122,9 +122,9 @@ class User(Resource):
                         data_password['password'])
                 )
                 user.save_to_db()
-                return {"message": f"User {data_user_details['name']}  was created"}, 201
+                return {"message": f"User {data_user_details['name']}  was created"}, 201, {"Access-Control-Allow-Origin": "*"}
             else:
-                return {"message": "That email address already exists"}, 400
+                return {"message": "That email address already exists"}, 400, {"Access-Control-Allow-Origin": "*"}
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -165,13 +165,13 @@ class User(Resource):
                             data_password['password'])
                         user.updated_at = datetime.utcnow()
                         user.save_to_db()
-                        return {"message": f"User {data_user_details['name']} was updated"}, 200
+                        return {"message": f"User {data_user_details['name']} was updated"}, 200, {"Access-Control-Allow-Origin": "*"}
                     else:
-                        return {"message": "This user does not exist"}, 404
+                        return {"message": "This user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
                 except Exception as e:
                     return {"message": str(e)}, 500
             else:
-                return {"message": "You do not have permission to modify this resource"}, 403
+                return {"message": "You do not have permission to modify this resource"}, 403, {"Access-Control-Allow-Origin": "*"}
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -205,12 +205,12 @@ class User(Resource):
 
                     if user:
                         user.delete_from_db()
-                        return {"message": "The user has been deleted successfully"}, 204
+                        return {"message": "The user has been deleted successfully"}, 204, {"Access-Control-Allow-Origin": "*"}
                     else:
-                        return {"message": "The user does not exist"}, 404
+                        return {"message": "The user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
                 except Exception as e:
                     return {"message": str(e)}, 500
             else:
-                return {"message": "You do not have permission to modify this resource"}, 403
+                return {"message": "You do not have permission to modify this resource"}, 403, {"Access-Control-Allow-Origin": "*"}
         except Exception as e:
             return {"message": str(e)}, 500

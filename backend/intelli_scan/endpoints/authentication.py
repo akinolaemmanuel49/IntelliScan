@@ -62,7 +62,7 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    return response, 200
+                    return response, 200, {"Access-Control-Allow-Origin": "*"}
                 else:
                     return {'message': "Wrong user credentials"}, 401
         except Exception as e:
@@ -101,7 +101,7 @@ class GoogleOauthAuth(Resource):
                 google_id=token['userinfo']['sub']
             )
             user.save_to_db()
-            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201
+            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201, {"Access-Control-Allow-Origin": "*"}
         else:
             return {"message": "That email address already exists"}, 400
 

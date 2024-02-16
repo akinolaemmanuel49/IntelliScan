@@ -76,8 +76,8 @@ class Inference(Resource):
                             # Update the user's image field in the database
                             user.image = new_filename
                             user.save_to_db()
-                            return {'message': 'Upload successful'}, 200
+                            return {'message': 'Upload successful'}, 200, {"Access-Control-Allow-Origin": "*"}
             except Exception as e:
                 return {'message': str(e)}, 500
         except Exception:
-            return {"message": "You do not have permission to use this resource, re-authenticate"}, 403
+            return {"message": "You do not have permission to use this resource, re-authenticate"}, 403, {"Access-Control-Allow-Origin": "*"}
