@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
+from flask_cors import CORS
 
 
 from .database import db
@@ -15,8 +16,11 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
     app.config.from_object(config_object)  # load configurations object
 
     # database initialization
-    db.init_app(app)
-    migrate = Migrate(app, db)
+    db.init_app(app=app)
+    migrate = Migrate(app=app, db=db)
+
+    # CORS extension initialization
+    CORS(app)
 
     oauth.init_app(app=app)
     oauth.register(
@@ -28,11 +32,13 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
     )
 
     # resource routing
-    api = Api(app)  # initialize Api instance
+    api = Api(app=app)  # initialize Api instance
     api.add_resource(Login, "/api/login")  # login resource
+
     # Google authentication callbacks
     api.add_resource(GoogleOauthSignin, "/api/google/login/callback")
     api.add_resource(GoogleOauthAuth, "/api/google/auth/callback")
+
     api.add_resource(User, "/api/user",
                      "/api/user/<int:user_id>")  # user resource
     api.add_resource(Inference, "/api/inference")  # inference resource
