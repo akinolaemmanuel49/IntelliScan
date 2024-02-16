@@ -1,4 +1,4 @@
-from flask import current_app, url_for
+from flask import current_app, make_response, url_for
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
@@ -26,6 +26,13 @@ class Login(Resource):
         parser.add_argument(
             'password', type=str, help='The password of the user is required', required=True)
         return parser.parse_args()
+
+    def options(self):
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = '*'
+        return response
 
     def post(self):
         """Returns user details and HTTP status as HTTP response based on HTTP request

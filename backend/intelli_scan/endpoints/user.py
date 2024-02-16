@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import current_app
+from flask import current_app, make_response
 from flask_restful import Resource, reqparse
 
 from intelli_scan.database.models.user import UserModel
@@ -57,6 +57,13 @@ class User(Resource):
         """Returns query object of an existing user or null"""
         return UserModel.query.filter_by(email=email_address).first()
 
+    def options(self):
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = '*'
+        return response
+
     def get(self):
         """Returns user details and HTTP status as HTTP response based on HTTP request
 
@@ -91,9 +98,9 @@ class User(Resource):
                     }
                     return response, 200, {"Access-Control-Allow-Origin": "*"}
                 else:
-                    return {"message": "This user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
+                    return {"message": "This user does not exist"}, 404
             else:
-                return {"message": decoded_token_response}, 403, {"Access-Control-Allow-Origin": "*"}
+                return {"message": decoded_token_response}, 403
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -124,7 +131,7 @@ class User(Resource):
                 user.save_to_db()
                 return {"message": f"User {data_user_details['name']}  was created"}, 201, {"Access-Control-Allow-Origin": "*"}
             else:
-                return {"message": "That email address already exists"}, 400, {"Access-Control-Allow-Origin": "*"}
+                return {"message": "That email address already exists"}, 400
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -167,11 +174,11 @@ class User(Resource):
                         user.save_to_db()
                         return {"message": f"User {data_user_details['name']} was updated"}, 200, {"Access-Control-Allow-Origin": "*"}
                     else:
-                        return {"message": "This user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
+                        return {"message": "This user does not exist"}, 404
                 except Exception as e:
                     return {"message": str(e)}, 500
             else:
-                return {"message": "You do not have permission to modify this resource"}, 403, {"Access-Control-Allow-Origin": "*"}
+                return {"message": "You do not have permission to modify this resource"}, 403
         except Exception as e:
             return {"message": str(e)}, 500
 
@@ -207,10 +214,10 @@ class User(Resource):
                         user.delete_from_db()
                         return {"message": "The user has been deleted successfully"}, 204, {"Access-Control-Allow-Origin": "*"}
                     else:
-                        return {"message": "The user does not exist"}, 404, {"Access-Control-Allow-Origin": "*"}
+                        return {"message": "The user does not exist"}, 404
                 except Exception as e:
                     return {"message": str(e)}, 500
             else:
-                return {"message": "You do not have permission to modify this resource"}, 403, {"Access-Control-Allow-Origin": "*"}
+                return {"message": "You do not have permission to modify this resource"}, 403
         except Exception as e:
             return {"message": str(e)}, 500

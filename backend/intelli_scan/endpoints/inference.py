@@ -3,7 +3,7 @@ import os
 import werkzeug
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from flask import current_app
+from flask import current_app, make_response
 from flask_restful import Resource, reqparse
 
 from intelli_scan.database.models.user import UserModel
@@ -25,6 +25,13 @@ class Inference(Resource):
         parser.add_argument(
             'picture', type=werkzeug.datastructures.FileStorage, location='files')
         return parser.parse_args()
+
+    def options(self):
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = '*'
+        return response
 
     def post(self):
         """Upload image via HTTP POST request
@@ -80,4 +87,4 @@ class Inference(Resource):
             except Exception as e:
                 return {'message': str(e)}, 500
         except Exception:
-            return {"message": "You do not have permission to use this resource, re-authenticate"}, 403, {"Access-Control-Allow-Origin": "*"}
+            return {"message": "You do not have permission to use this resource, re-authenticate"}, 403
