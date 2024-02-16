@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
-from flask_cors import CORS
 
 
 from .database import db
@@ -18,9 +17,6 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
     # database initialization
     db.init_app(app=app)
     migrate = Migrate(app=app, db=db)
-
-    # CORS extension initialization
-    CORS(app)
 
     oauth.init_app(app=app)
     oauth.register(
