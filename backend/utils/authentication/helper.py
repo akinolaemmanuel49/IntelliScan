@@ -1,3 +1,4 @@
+from typing import List
 from flask_restful import reqparse
 from flask import Flask
 
@@ -15,3 +16,7 @@ def get_auth_token():
 
     auth_token = parser.parse_args()
     return auth_token['Authorization'].split()[1]
+
+
+def get_allowed_origins(app: Flask) -> List[str]:
+    return app.config['ALLOWED_ORIGINS']
