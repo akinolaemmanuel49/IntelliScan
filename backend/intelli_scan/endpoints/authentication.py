@@ -2,7 +2,7 @@ from flask import current_app, make_response, request, url_for
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
-from utils.authentication.helper import get_secret_key
+from utils.authentication.helper import get_allowed_origins, get_secret_key
 from intelli_scan.database.models.user import UserModel
 from utils.authentication.jwt_handler import JWTHandler
 
@@ -11,7 +11,7 @@ oauth = OAuth()
 
 
 class Login(Resource):
-    origin = 'http://localhost:3000'
+    origin = ''
 
     @staticmethod
     def get_login_details_parsed_args():
@@ -33,9 +33,8 @@ class Login(Resource):
         response.headers['Access-Control-Allow-Credentials'] = True
 
         # Set Access-Control-Allow-Origin based on request origin
-        self.origin = request.headers.get('Origin')
-        if self.origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
-                           'http://127.0.0.1:3000', 'http://localhost:3000']:
+        self.origin = request.headers.get("Origin")
+        if self.origin in get_allowed_origins(app=current_app):
             response.headers['Access-Control-Allow-Origin'] = self.origin
 
         # Set allowed headers and methods
@@ -79,7 +78,10 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                    # Get the origin from the request headers
+                    self.origin = request.headers.get("Origin")
+                    if self.origin in get_allowed_origins(app=current_app):
+                        return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
                 else:
                     return {'message': "Wrong user credentials"}, 401
         except Exception as e:

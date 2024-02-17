@@ -8,11 +8,11 @@ from flask_restful import Resource, reqparse
 
 from intelli_scan.database.models.user import UserModel
 from utils.authentication.jwt_handler import JWTHandler
-from utils.authentication.helper import get_secret_key, get_auth_token
+from utils.authentication.helper import get_allowed_origins, get_secret_key, get_auth_token
 
 
 class Inference(Resource):
-    origin = 'http://localhost:3000'
+    origin = ''
 
     @staticmethod
     def get_image_to_infer_parsed_args():
@@ -32,9 +32,8 @@ class Inference(Resource):
         response.headers['Access-Control-Allow-Credentials'] = True
 
         # Set Access-Control-Allow-Origin based on request origin
-        self.origin = request.headers.get('Origin')
-        if self.origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
-                      'http://127.0.0.1:3000', 'http://localhost:3000']:
+        self.origin = request.headers.get("Origin")
+        if self.origin in get_allowed_origins(app=current_app):
             response.headers['Access-Control-Allow-Origin'] = self.origin
 
         # Set allowed headers and methods
@@ -93,7 +92,10 @@ class Inference(Resource):
                             # Update the user's image field in the database
                             user.image = new_filename
                             user.save_to_db()
-                            return {'message': 'Upload successful'}, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                            # Get the origin from the request headers
+                            self.origin = request.headers.get("Origin")
+                            if self.origin in get_allowed_origins(app=current_app):
+                                return {'message': 'Upload successful'}, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
             except Exception as e:
                 return {'message': str(e)}, 500
         except Exception:
