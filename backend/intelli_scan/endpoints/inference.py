@@ -28,7 +28,11 @@ class Inference(Resource):
 
     def options(self):
         response = make_response()
-        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Credentials'] = True
+        response.headers['Access-Control-Allow-Origin'] = ['http://127.0.0.1:5173',
+                                                           'http://localhost:5173',
+                                                           'http://127.0.0.1:3000',
+                                                           'http://localhost:3000']
         response.headers['Access-Control-Allow-Headers'] = '*'
         response.headers['Access-Control-Allow-Methods'] = '*'
         return response
