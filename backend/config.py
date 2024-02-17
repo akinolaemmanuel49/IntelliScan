@@ -22,6 +22,7 @@ class Config:
     GOOGLE_CLIENT_ID: str = os.environ.get('GOOGLE_CLIENT_ID')
     GOOGLE_CLIENT_SECRET: str = os.environ.get('GOOGLE_CLIENT_SECRET')
     UPLOAD_FOLDER: str = os.environ.get('UPLOAD_FOLDER')
+    ALLOWED_ORIGINS: list = [str(origin) for origin in str(os.environ.get('ALLOWED_ORIGINS')).split(' ')]
 
 
 class ProductionConfig(Config):
