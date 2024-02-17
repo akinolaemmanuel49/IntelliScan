@@ -93,7 +93,7 @@ class Inference(Resource):
                             # Update the user's image field in the database
                             user.image = new_filename
                             user.save_to_db()
-                            return {'message': 'Upload successful'}, 200, {"Access-Control-Allow-Origin": "*"}
+                            return {'message': 'Upload successful'}, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
             except Exception as e:
                 return {'message': str(e)}, 500
         except Exception:
