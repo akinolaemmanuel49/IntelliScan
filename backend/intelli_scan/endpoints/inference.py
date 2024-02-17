@@ -12,7 +12,7 @@ from utils.authentication.helper import get_secret_key, get_auth_token
 
 
 class Inference(Resource):
-    origin = ''
+    origin = 'http://localhost:3000'
 
     @staticmethod
     def get_image_to_infer_parsed_args():

@@ -11,7 +11,7 @@ oauth = OAuth()
 
 
 class Login(Resource):
-    origin = ''
+    origin = 'http://localhost:3000'
 
     @staticmethod
     def get_login_details_parsed_args():
