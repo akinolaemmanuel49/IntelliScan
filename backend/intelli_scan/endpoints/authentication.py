@@ -1,4 +1,4 @@
-from flask import current_app, make_response, url_for
+from flask import current_app, make_response, request, url_for
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
@@ -30,12 +30,17 @@ class Login(Resource):
     def options(self):
         response = make_response()
         response.headers['Access-Control-Allow-Credentials'] = True
-        response.headers['Access-Control-Allow-Origin'] = ['http://127.0.0.1:5173',
-                                                           'http://localhost:5173',
-                                                           'http://127.0.0.1:3000',
-                                                           'http://localhost:3000']
-        response.headers['Access-Control-Allow-Headers'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = '*'
+
+        # Set Access-Control-Allow-Origin based on request origin
+        origin = request.headers.get('Origin')
+        if origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
+                      'http://127.0.0.1:3000', 'http://localhost:3000']:
+            response.headers['Access-Control-Allow-Origin'] = origin
+
+        # Set allowed headers and methods
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+
         return response
 
     def post(self):
