@@ -12,6 +12,7 @@ from utils.authentication.helper import get_secret_key, get_auth_token
 
 
 class Inference(Resource):
+    origin = ''
 
     @staticmethod
     def get_image_to_infer_parsed_args():
@@ -31,10 +32,10 @@ class Inference(Resource):
         response.headers['Access-Control-Allow-Credentials'] = True
 
         # Set Access-Control-Allow-Origin based on request origin
-        origin = request.headers.get('Origin')
-        if origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
+        self.origin = request.headers.get('Origin')
+        if self.origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
                       'http://127.0.0.1:3000', 'http://localhost:3000']:
-            response.headers['Access-Control-Allow-Origin'] = origin
+            response.headers['Access-Control-Allow-Origin'] = self.origin
 
         # Set allowed headers and methods
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'

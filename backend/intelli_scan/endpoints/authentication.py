@@ -11,6 +11,7 @@ oauth = OAuth()
 
 
 class Login(Resource):
+    origin = ''
 
     @staticmethod
     def get_login_details_parsed_args():
@@ -32,10 +33,10 @@ class Login(Resource):
         response.headers['Access-Control-Allow-Credentials'] = True
 
         # Set Access-Control-Allow-Origin based on request origin
-        origin = request.headers.get('Origin')
-        if origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
-                      'http://127.0.0.1:3000', 'http://localhost:3000']:
-            response.headers['Access-Control-Allow-Origin'] = origin
+        self.origin = request.headers.get('Origin')
+        if self.origin in ['http://127.0.0.1:5173', 'http://localhost:5173',
+                           'http://127.0.0.1:3000', 'http://localhost:3000']:
+            response.headers['Access-Control-Allow-Origin'] = self.origin
 
         # Set allowed headers and methods
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
@@ -78,7 +79,7 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    return response, 200, {"Access-Control-Allow-Origin": "*"}
+                    return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
                 else:
                     return {'message': "Wrong user credentials"}, 401
         except Exception as e:
@@ -117,7 +118,7 @@ class GoogleOauthAuth(Resource):
                 google_id=token['userinfo']['sub']
             )
             user.save_to_db()
-            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201, {"Access-Control-Allow-Origin": "*"}
+            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201
         else:
             return {"message": "That email address already exists"}, 400
 
