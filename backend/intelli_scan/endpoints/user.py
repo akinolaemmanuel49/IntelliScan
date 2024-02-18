@@ -118,46 +118,6 @@ class User(Resource):
         except Exception as e:
             return {"message": str(e)}, 500
 
-    # def get(self):
-    #     """Returns user details and HTTP status as HTTP response based on HTTP request
-
-    #     Returns:
-    #         JSON object: A 200 HTTP status and response with details of a user
-
-    #         JSON object: A 403 HTTP status and response for an unauthenticated or unauthorized user
-
-    #         JSON object: A 404 HTTP status and response for a non-existing user
-
-    #     Raises:
-    #         Exception: General exceptions aligned to SQLAlchemy in the form of a 500 HTTP status
-    #         and JSON content-type response
-    #     """
-    #     data_token = get_auth_token()
-    #     jwt_handler = JWTHandler()
-
-    #     try:
-    #         # check token validity
-    #         decoded_token_response = jwt_handler.decode(
-    #             encoded_jwt=data_token, secret=get_secret_key(app=current_app))['sub']
-
-    #         if isinstance(decoded_token_response, int):
-    #             user = UserModel.query.filter_by(
-    #                 id=decoded_token_response).first()
-
-    #             if user:
-    #                 response = {
-    #                     "user_id": user.id,
-    #                     "name": user.name,
-    #                     "email": user.email
-    #                 }
-    #                 return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
-    #             else:
-    #                 return {"message": "This user does not exist"}, 404
-    #         else:
-    #             return {"message": decoded_token_response}, 403
-    #     except Exception as e:
-    #         return {"message": str(e)}, 500
-
     def post(self):
         """Registers a new user via HTTP POST request
 

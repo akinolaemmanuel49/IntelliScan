@@ -37,6 +37,6 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
 
     api.add_resource(User, "/api/user",
                      "/api/user/<int:user_id>")  # user resource
-    api.add_resource(Inference, "/api/inference")  # inference resource
+    api.add_resource(Inference, "/api/inference", "/api/inference/<int:inference_id>")  # inference resource
 
     return app
