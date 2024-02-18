@@ -138,7 +138,7 @@ class Inference(Resource):
                                 "id": inference.id,
                                 "file": inference.file,
                                 "user_id": inference.user_id,
-                                "created_at": inference.created_at
+                                "created_at": str(inference.created_at)
                             } for inference in inferences]
                             return serialized_inferences, 200
                         
@@ -151,7 +151,7 @@ class Inference(Resource):
                                     "id": inference.id,
                                     "file": inference.file,
                                     "user_id": inference.user_id,
-                                    "created_at": inference.created_at
+                                    "created_at": str(inference.created_at)
                                 }
                                 return serialized_inference, 200
                             else:
