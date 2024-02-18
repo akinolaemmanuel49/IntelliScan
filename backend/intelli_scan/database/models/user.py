@@ -4,6 +4,7 @@ from sqlalchemy.orm import validates
 
 from intelli_scan.database import db, pwd_context
 from intelli_scan.database.models import BaseModel
+from intelli_scan.database.models.inference import InferenceModel
 
 
 class UserModel(BaseModel):
@@ -14,6 +15,7 @@ class UserModel(BaseModel):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=True)
     google_id = db.Column(db.String(255), nullable=True, unique=True)
+    inferences = db.relationship('InferenceModel', backref='users', lazy=True)
 
     @validates("email")
     def validate_email(self, key, email):
