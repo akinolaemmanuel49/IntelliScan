@@ -1,8 +1,8 @@
-from flask import current_app, make_response, request, url_for
+from flask import current_app, url_for
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
-from utils.authentication.helper import get_allowed_origins, get_secret_key
+from utils.authentication.helper import get_secret_key
 from intelli_scan.database.models.user import UserModel
 from utils.authentication.jwt_handler import JWTHandler
 
@@ -28,20 +28,20 @@ class Login(Resource):
             'password', type=str, help='The password of the user is required', required=True)
         return parser.parse_args()
 
-    def options(self):
-        response = make_response()
-        response.headers['Access-Control-Allow-Credentials'] = True
+    # def options(self):
+    #     response = make_response()
+    #     response.headers['Access-Control-Allow-Credentials'] = True
 
-        # Set Access-Control-Allow-Origin based on request origin
-        self.origin = request.headers.get("Origin")
-        if self.origin in get_allowed_origins(app=current_app):
-            response.headers['Access-Control-Allow-Origin'] = self.origin
+    #     # Set Access-Control-Allow-Origin based on request origin
+    #     self.origin = request.headers.get("Origin")
+    #     if self.origin in get_allowed_origins(app=current_app):
+    #         response.headers['Access-Control-Allow-Origin'] = self.origin
 
-        # Set allowed headers and methods
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    #     # Set allowed headers and methods
+    #     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    #     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
 
-        return response
+    #     return response
 
     def post(self):
         """Returns user details and HTTP status as HTTP response based on HTTP request
@@ -78,10 +78,8 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    # Get the origin from the request headers
-                    self.origin = request.headers.get("Origin")
-                    if self.origin in get_allowed_origins(app=current_app):
-                        return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                    # return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                    return response
                 else:
                     return {'message': "Wrong user credentials"}, 401
         except Exception as e:
