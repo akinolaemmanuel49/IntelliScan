@@ -1,8 +1,8 @@
-from flask import current_app, url_for
+from flask import current_app, request, url_for, make_response
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
-from utils.authentication.helper import get_secret_key
+from utils.authentication.helper import get_allowed_origins, get_secret_key
 from intelli_scan.database.models.user import UserModel
 from utils.authentication.jwt_handler import JWTHandler
 
@@ -28,20 +28,18 @@ class Login(Resource):
             'password', type=str, help='The password of the user is required', required=True)
         return parser.parse_args()
 
-    # def options(self):
-    #     response = make_response()
-    #     response.headers['Access-Control-Allow-Credentials'] = True
+    def options(self):
+        response = make_response()
+        # Set Access-Control-Allow-Origin based on request origin
+        self.origin = request.headers.get("Origin")
+        if self.origin in get_allowed_origins(app=current_app):
+            response.headers['Access-Control-Allow-Origin'] = self.origin
 
-    #     # Set Access-Control-Allow-Origin based on request origin
-    #     self.origin = request.headers.get("Origin")
-    #     if self.origin in get_allowed_origins(app=current_app):
-    #         response.headers['Access-Control-Allow-Origin'] = self.origin
+        # Set allowed headers and methods
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
 
-    #     # Set allowed headers and methods
-    #     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    #     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-
-    #     return response
+        return response
 
     def post(self):
         """Returns user details and HTTP status as HTTP response based on HTTP request
@@ -78,8 +76,8 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    # return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
-                    return response
+                    return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                    # return response
                 else:
                     return {'message': "Wrong user credentials"}, 401
         except Exception as e:
@@ -108,7 +106,7 @@ class GoogleOauthAuth(Resource):
                 'message': f"Logged in as {user.name}",
                 'auth_token': auth_token
             }
-            return response
+            return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
         check = UserModel.query.filter_by(
             email=token['userinfo']['email']).first()
         if not check:
@@ -118,9 +116,9 @@ class GoogleOauthAuth(Resource):
                 google_id=token['userinfo']['sub']
             )
             user.save_to_db()
-            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201
+            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201, {"Access-Control-Allow-Origin": f"{self.origin}"}
         else:
-            return {"message": "That email address already exists"}, 400
+            return {"message": "That email address already exists"}, 400, {"Access-Control-Allow-Origin": f"{self.origin}"}
 
 
 class Logout(Resource):
