@@ -29,7 +29,8 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
 
     # resource routing
     api = Api(app=app)  # initialize Api instance
-    CORS(app) # Enable CORS for all routes
+    CORS(app, supports_credentials=True, expose_headers=[
+         "Authorization"])  # Enable CORS for all routes
     api.add_resource(Login, "/api/login")  # login resource
 
     # Google authentication callbacks
@@ -38,6 +39,7 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
 
     api.add_resource(User, "/api/user",
                      "/api/user/<int:user_id>")  # user resource
-    api.add_resource(Inference, "/api/inference", "/api/inference/<int:inference_id>")  # inference resource
+    api.add_resource(Inference, "/api/inference",
+                     "/api/inference/<int:inference_id>")  # inference resource
 
     return app
