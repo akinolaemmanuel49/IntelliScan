@@ -73,12 +73,12 @@ class Login(Resource):
                         'message': f"Logged in as {user.name}",
                         'auth_token': auth_token
                     }
-                    return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+                    return response, 200, {"Access-Control-Allow-Origin": "*"}
                     # return response
                 else:
-                    return {'message': "Wrong user credentials"}, 401
+                    return {'message': "Wrong user credentials"}, 401, {"Access-Control-Allow-Origin": "*"}
         except Exception as e:
-            return {'message': str(e)}, 500
+            return {'message': str(e)}, 500, {"Access-Control-Allow-Origin": "*"}
 
 
 class GoogleOauthSignin(Resource):
@@ -103,7 +103,7 @@ class GoogleOauthAuth(Resource):
                 'message': f"Logged in as {user.name}",
                 'auth_token': auth_token
             }
-            return response, 200, {"Access-Control-Allow-Origin": f"{self.origin}"}
+            return response, 200, {"Access-Control-Allow-Origin": "*"}
         check = UserModel.query.filter_by(
             email=token['userinfo']['email']).first()
         if not check:
@@ -113,9 +113,9 @@ class GoogleOauthAuth(Resource):
                 google_id=token['userinfo']['sub']
             )
             user.save_to_db()
-            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201, {"Access-Control-Allow-Origin": f"{self.origin}"}
+            return {"message": f"User {token['userinfo']['given_name']} {token['userinfo']['family_name']} was created"}, 201, {"Access-Control-Allow-Origin": "*"}
         else:
-            return {"message": "That email address already exists"}, 400, {"Access-Control-Allow-Origin": f"{self.origin}"}
+            return {"message": "That email address already exists"}, 400, {"Access-Control-Allow-Origin": "*"}
 
 
 class Logout(Resource):
