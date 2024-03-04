@@ -2,7 +2,7 @@ from flask import current_app, request, url_for, make_response
 from flask_restful import Resource, reqparse
 from authlib.integrations.flask_client import OAuth
 
-from utils.authentication.helper import get_allowed_origins, get_secret_key
+from utils.authentication.helper import get_secret_key
 from intelli_scan.database.models.user import UserModel
 from utils.authentication.jwt_handler import JWTHandler
 
@@ -30,10 +30,7 @@ class Login(Resource):
 
     def options(self):
         response = make_response()
-        # Set Access-Control-Allow-Origin based on request origin
-        self.origin = request.headers.get("Origin")
-        if self.origin in get_allowed_origins(app=current_app):
-            response.headers['Access-Control-Allow-Origin'] = self.origin
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
 
         # Set allowed headers and methods
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
