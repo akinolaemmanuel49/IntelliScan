@@ -2,7 +2,7 @@ import re
 
 from sqlalchemy.orm import validates
 
-from intelli_scan.database import db, pwd_context
+from intelli_scan.database import db, ph
 from intelli_scan.database.models import BaseModel
 from intelli_scan.database.models.inference import InferenceModel
 
@@ -32,9 +32,9 @@ class UserModel(BaseModel):
     @staticmethod
     def generate_hash(password: str) -> str:
         """Generates a password hash from a string password"""
-        return pwd_context.hash(password)
+        return ph.hash(password=password)
 
     @staticmethod
-    def verify_hash(password: str, password_hash: str) -> bool:
+    def verify_password(password: str, password_hash: str) -> bool:
         """Verifies the provided password against the hashed password"""
-        return pwd_context.verify(password, password_hash)
+        return ph.verify(hash=password_hash, password=password)

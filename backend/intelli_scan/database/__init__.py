@@ -1,9 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from passlib.context import CryptContext
+from argon2 import PasswordHasher
 
 from config import Config
 
 env = Config()
-pwd_context = CryptContext(schemes=env.ENCRYPTION_SCHEMES)
+ph = PasswordHasher()
 
 db = SQLAlchemy()
