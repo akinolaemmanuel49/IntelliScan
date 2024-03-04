@@ -14,8 +14,12 @@ def get_auth_token():
                         help='The authentication token in the Authorization header is required to access this resource',
                         required=True)
 
-    auth_token = parser.parse_args()
-    return auth_token['Authorization'].split()[1]
+    args = parser.parse_args()
+    auth_header = getattr(args, 'Authorization', None)
+    if auth_header and 'Bearer' in auth_header:
+        return auth_header.split()[1]
+    else:
+        raise Exception('Missing or incorrect Authorization header')
 
 
 def get_allowed_origins(app: Flask) -> List[str]:

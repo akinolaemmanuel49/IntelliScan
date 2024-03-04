@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
-# from flask_cors import CORS
+from flask_cors import CORS
 
 from .database import db
 from .endpoints.authentication import GoogleOauthAuth, GoogleOauthSignin, Login, oauth
@@ -29,8 +29,8 @@ def create_app(config_object: str = 'config.DevelopmentConfig') -> Flask:
 
     # resource routing
     api = Api(app=app)  # initialize Api instance
-    # CORS(app, supports_credentials=True, expose_headers=[
-    #      "Authorization"])  # Enable CORS for all routes
+    CORS(app, supports_credentials=True, expose_headers=[
+         "Authorization"])  # Enable CORS for all routes
     api.add_resource(Login, "/api/login")  # login resource
 
     # Google authentication callbacks
