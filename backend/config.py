@@ -17,9 +17,8 @@ class Config:
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS")
     )
     SQLALCHEMY_ECHO: bool = True
-    # SQLALCHEMY_DATABASE_URI: str = os.environ.get(
-    #     "DATABASE_URL").replace('postgres', 'postgresql', 1)
-    SQLALCHEMY_DATABASE_URI: str = os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI: str = os.environ.get("DATABASE_URL").replace('postgres', 'postgresql', 1)
+    # SQLALCHEMY_DATABASE_URI: str = os.environ.get("DATABASE_URL")
     ENCRYPTION_SCHEMES: list[str] = ["bcrypt"]
     GOOGLE_OAUTH2_CONF_URL: str = os.environ.get('GOOGLE_OAUTH2_CONF_URL')
     GOOGLE_CLIENT_ID: str = os.environ.get('GOOGLE_CLIENT_ID')
